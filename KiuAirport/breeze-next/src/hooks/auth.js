@@ -13,7 +13,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             .then(res => res.data)
             .catch(error => {
                 if (error.response.status !== 409) throw error
-
+                console.log("from useSWR")
                 router.push('/verify-email')
             }),
     )
@@ -92,20 +92,76 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }
 
     const logout = async () => {
-        if (!error) {
-            await axios.post('/logout').then(() => mutate())
-        }
+        // if (!error) {
+        //     await axios.post('/logout').then(() => mutate())
+        // }
+        //
+        // window.location.pathname = '/login'
 
-        window.location.pathname = '/login'
+        await csrf();
+
+
+        axios
+            .get('/api/test2')
+            .then(res => console.log(res.data))
+            .catch(error => {
+                if (error.response.status !== 409) throw error
+                console.log("from useSWR")
+                // router.push('/verify-email')
+            })
     }
+
+    const test2 = async () => {
+        await csrf();
+
+
+        axios
+            .get('/api/test2')
+            .then(res => console.log(res.data))
+            .catch(error => {
+                if (error.response.status !== 409) throw error
+                console.log("from useSWR")
+                // router.push('/verify-email')
+            })
+
+    }
+
+
 
     useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user)
             router.push(redirectIfAuthenticated)
 
-        if (middleware === 'auth' && !user?.email_verified_at)
+
+        // if(user == null){
+        //     router.back();
+        //     return;
+        // }
+
+        // if(middleware === 'auth' && !user){
+        //
+        // }
+
+        if (user && middleware === 'auth' && !user?.email_verified_at) {
+            console.log(user)
+            console.log(Date.now())
+            // console.log("fromn gsfgsdgs")
             router.push('/verify-email')
-        
+        }
+
+        if(user) {
+            console.log(user);
+
+            axios
+                .get('/api/test2')
+                .then(res => console.log(res.data))
+                .catch(error => {
+                    if (error.response.status !== 409) throw error
+                    console.log("from useSWR")
+                    // router.push('/verify-email')
+                })
+        }
+
         if (
             window.location.pathname === '/verify-email' &&
             user?.email_verified_at
