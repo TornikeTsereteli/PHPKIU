@@ -11,12 +11,13 @@ use App\Services\RouteService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use function Pest\Laravel\json;
 
 
 class AdminController extends Controller
 {
-    protected $routeService;
-    protected $orderService;
+    protected RouteService $routeService;
+    protected OrderService $orderService;
 
     public function __construct(RouteService $routeService, OrderService $orderService)
     {
@@ -60,17 +61,43 @@ class AdminController extends Controller
     }
 
     public function updateRoute(Request $request){
-        $this->routeService->updateRoute($request);
+
+        $request->validate([
+            'id'=> ['required','int'],
+            'start_location' => ['required', 'string', 'max:50'],
+            'end_location' => ['required', 'string', 'max:50'],
+            'price_per_ticket' => ['required'],
+            'departure_time' => [],
+
+        ]);
+
+        $routeData = [
+            'start_location' => $request->start_location,
+            'end_location' => $request->end_location,
+            'price_per_ticket' => $request->price_per_ticket,
+            'departure_time' => $request->departure_time
+        ];
+
+
+        $this->routeService->updateRoute($request->id,$routeData);
     }
 
     public function deleteRoute(Request $request)
     {
-        $this->routeService->deleteRoute($request);
+        $request->validate([
+            'id'=> ['required','int'],
+        ]);
+
+        $this->routeService->deleteRoute($request->id);
     }
 
     public function getAllOrdersDetails(Request $request)
     {
-        return $this->orderService->getOrdersDetails();
+        Log::info("trying to get data from Orders table ... ", [$request]);
+        $orders = $this->orderService->getOrdersDetails();
+        Log::info("successfully get data from Orders table ... ", [$orders]);
+        return $orders;
+
     }
 
 

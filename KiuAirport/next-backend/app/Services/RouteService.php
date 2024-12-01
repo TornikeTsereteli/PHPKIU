@@ -31,14 +31,14 @@ class RouteService
 
     }
     // route // start_location, end_location
-    public function deleteRoute($RouteDto){
-
+    public function deleteRoute($id){
+        return $this->routeRepository->delete($id);
     }
 
     // start_location, end_location, price_per_ticket
-    public function updateRoute($RouteDto)
+    public function updateRoute($id, array $routeData)
     {
-
+        $this->routeRepository->update($id, $routeData);
     }
 
 }

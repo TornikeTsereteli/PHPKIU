@@ -43,7 +43,8 @@ class RouteRepository implements RouteRepositoryInterface
     {
         $route = Route::find($id);
         if ($route) {
-            return $route->delete();
+            $route->delete();
+            return true;
         }
         return false;
     }

@@ -6,7 +6,8 @@ import {useEffect, useState} from "react";
 
 
 const Admin1 = () => {
-    const {userGetAllRoutes,adminAddRoute} = useAuth({middleware:"auth"});
+    const {userGetAllRoutes,adminAddRoute, adminGetOrders, adminDeleteRoute, adminUpdateRoute} =
+        useAuth({middleware:"auth"});
 
     const [data, setData] = useState(null);
 
@@ -19,6 +20,16 @@ const Admin1 = () => {
                 const price_per_ticket = 99;
                 const departure_time = "2024-12-1 14:00:00";
                 console.log(await adminAddRoute(start_location, end_location, price_per_ticket,departure_time));
+
+
+                console.log(await userGetAllRoutes());
+
+                console.log(await adminGetOrders());
+
+                console.log(await adminDeleteRoute(35));
+
+                console.log(await adminUpdateRoute(45,start_location,end_location,104,departure_time));
+
 
                 // setData(result);
                 // console.log(result)

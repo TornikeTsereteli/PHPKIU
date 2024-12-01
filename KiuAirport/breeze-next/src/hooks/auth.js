@@ -103,44 +103,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     }
 
-    const test2 = async () => {
-        await csrf();
 
-
-        await csrf(); // Ensure this is resolved first.
-
-        try {
-            const response = await axios.get('/api/test2');
-            console.log(response.data);
-            return 23; // Return the desired result.
-        } catch (error) {
-            if (error.response?.status !== 409) throw error; // Re-throw other errors.
-            console.log("from useSWR");
-            return {}; // Handle specific cases and return accordingly.
-        }
-
-    }
-
-
-    const adminAddRoute = async (startLocation,endLocation,pricePerTicket,departure_time) =>{
-        await csrf();
-
-        const data = {
-            start_location: startLocation,
-            end_location: endLocation,
-            price_per_ticket: pricePerTicket,
-            departure_time: departure_time
-        }
-
-        axios
-            .post('/api/admin/add-route', data)
-            .then(() => mutate())
-            .catch(error => {
-                // throw error
-
-                // setErrors(error.response.data.errors)
-            })
-    }
 
     const userGetAllRoutes = async () => {
         await csrf();
@@ -229,10 +192,78 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }, [user, error])
 
 
-    const test3 = () => {
-        return 5;
+
+    const adminAddRoute = async (startLocation,endLocation,pricePerTicket,departure_time) =>{
+        await csrf();
+
+        const data = {
+            start_location: startLocation,
+            end_location: endLocation,
+            price_per_ticket: pricePerTicket,
+            departure_time: departure_time
+        }
+
+        try {
+            await axios.post('/api/admin/add-route', data)
+            return "Successfully added"
+        }catch(error)
+        {
+            // throw error
+            console.log(error)
+            return "Error"
+            // setErrors(error.response.data.errors)
+        }
     }
 
+
+    const adminDeleteRoute = async (id) =>{
+        await csrf();
+
+        const data = {
+            id: id
+        }
+
+        try {
+            await axios.post('/api/admin/delete-route', data);
+            return "Sucessfully deleted";
+        }catch (err){        // throw error
+                console.log(error.response?.status);
+                console.log(error.message);
+                return "Error"
+        }
+    }
+
+    const adminUpdateRoute = async (id, startLocation,endLocation,pricePerTicket,departure_time) =>{
+        await csrf();
+
+        const data = {
+            id : id,
+            start_location: startLocation,
+            end_location: endLocation,
+            price_per_ticket: pricePerTicket,
+            departure_time: departure_time
+        }
+        try {
+            await axios.post('/api/admin/update-route', data)
+            return "Successfully Updated"
+        }catch(error) {
+            console.log(error.response?.status);
+            console.log(error.message);
+            return "Error"
+        }
+    }
+
+    const adminGetOrders = async () => {
+        await csrf();
+
+        try {
+            return await axios.get('/api/admin/orders')
+        }catch(error) {
+            console.log(error.response?.status);
+            console.log(error.message);
+            return [];
+        }
+    }
 
     return {
         user,
@@ -242,9 +273,10 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         resetPassword,
         resendEmailVerification,
         logout,
-        test2,
-        test3,
         userGetAllRoutes,
         adminAddRoute,
+        adminDeleteRoute,
+        adminUpdateRoute,
+        adminGetOrders
     }
 }
