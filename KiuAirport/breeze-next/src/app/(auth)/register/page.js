@@ -15,6 +15,7 @@ const Page = () => {
     })
 
     const [name, setName] = useState('')
+    const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
@@ -25,6 +26,7 @@ const Page = () => {
 
         register({
             name,
+            lastName,
             email,
             password,
             password_confirmation: passwordConfirmation,
@@ -49,6 +51,20 @@ const Page = () => {
                 />
 
                 <InputError messages={errors.name} className="mt-2" />
+            </div>
+            <div className="mt-4">
+                <Label htmlFor="email">Lastname</Label>
+
+                <Input
+                    id="lastName"
+                    type="text"
+                    value={lastName}
+                    className="block mt-1 w-full"
+                    onChange={event => setLastName(event.target.value)}
+                    required
+                />
+
+                <InputError messages={errors.lastName} className="mt-2" />
             </div>
 
             {/* Email Address */}
@@ -86,9 +102,7 @@ const Page = () => {
 
             {/* Confirm Password */}
             <div className="mt-4">
-                <Label htmlFor="passwordConfirmation">
-                    Confirm Password
-                </Label>
+                <Label htmlFor="passwordConfirmation">Confirm Password</Label>
 
                 <Input
                     id="passwordConfirmation"
@@ -110,7 +124,7 @@ const Page = () => {
             <div className="flex items-center justify-end mt-4">
                 <Link
                     href="/login"
-                    className="underline text-sm text-gray-600 hover:text-gray-900">
+                    className="underline text-sm text-orange-500 hover:text-orange-600">
                     Already registered?
                 </Link>
 
