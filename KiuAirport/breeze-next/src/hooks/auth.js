@@ -105,44 +105,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
 
 
-    const userGetAllRoutes = async () => {
-        await csrf();
-
-
-
-        try {
-            return await axios.get('/api/user/routes');
-        } catch (error) {
-            console.log(error.response?.status);
-            console.log(error.message);
-            return {};
-        }
-
-    }
-
-
-    const userBuyTicket = async () =>{
-        // await csrf();
-        //
-        // try {
-        //     await axios.post('/api/user/buy-ticket')
-        // }
-
-
-    }
-
-    const userGetTickets = async () => {
-        await csrf();
-
-        try {
-            return await axios.post('/api/user/tickets')
-        }catch(error) {
-            console.log(error.response?.status);
-            console.log(error.message);
-            throw error;
-        }
-    }
-
 
     useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user)
@@ -191,6 +153,54 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         if (middleware === 'auth' && error) logout()
     }, [user, error])
 
+
+
+
+    const userGetAllRoutes = async () => {
+        await csrf();
+        try {
+            return await axios.get('/api/user/routes');
+        } catch (error) {
+            console.log(error.response?.status);
+            console.log(error.message);
+            return {};
+        }
+    }
+
+    const userGetOrderHistory = async () => {
+        await csrf();
+
+        try {
+            return await axios.get('/api/user/order-history');
+        }catch (error) {
+            console.log(error.response?.status);
+            console.log(error.message);
+            return [];
+        }
+    }
+
+
+    const userBuyTicket = async () =>{
+        // await csrf();
+        //
+        // try {
+        //     await axios.post('/api/user/buy-ticket')
+        // }
+
+
+    }
+
+    const userGetTickets = async () => {
+        await csrf();
+
+        try {
+            return await axios.post('/api/user/tickets')
+        }catch(error) {
+            console.log(error.response?.status);
+            console.log(error.message);
+            throw error;
+        }
+    }
 
 
     const adminAddRoute = async (startLocation,endLocation,pricePerTicket,departure_time) =>{
@@ -274,6 +284,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         resendEmailVerification,
         logout,
         userGetAllRoutes,
+        userGetOrderHistory,
         adminAddRoute,
         adminDeleteRoute,
         adminUpdateRoute,

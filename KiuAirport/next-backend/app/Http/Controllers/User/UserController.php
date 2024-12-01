@@ -4,8 +4,8 @@ namespace app\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use app\Services\OrderService;
-use app\Services\OrderServiceInterface;
+use App\Services\OrderService;
+use App\Services\OrderServiceInterface;
 use App\Services\RouteService;
 use Exception;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-//    protected OrderService $orderService;
+    protected OrderService $orderService;
 
     protected RouteService $routeService;
 
-    public function __construct(/*OrderService $orderService,*/ RouteService $routeService)
+    public function __construct(RouteService $routeService,OrderService  $orderService)
     {
-//        $this->orderService = $orderService;
+        $this->orderService = $orderService;
         $this->routeService = $routeService;
     }
     /**
@@ -48,10 +48,11 @@ class UserController extends Controller
 //        return $this->orderService->createOrder($order);
 //    }
 
-//    public function getAllTickets(Request $request) : array {
-//        $user = $request->user();
-//        return $this->orderService->getOrderDetailsByUserId($user->id);
-//    }
+    public function getOrderHistory(Request $request)
+    {
+        $user = $request->user();
+        return $this->orderService->getOrderDetailsByUserId($user->id);
+    }
 
     public function getRoutes(Request $request)
     {

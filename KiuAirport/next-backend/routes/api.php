@@ -24,8 +24,8 @@ Route::middleware(['auth:sanctum',AdminMiddleware::class])->get('/test4', functi
 
 Route::prefix('user')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/routes',[UserController::class,'getRoutes']); // +
-    Route::post('/buy-ticket',[UserController::class,'buyTicket']);
-    Route::get('/tickets',[UserController::class,'getAllTickets']);
+    Route::post('/buy-ticket',[UserController::class,'buyTicket']); // ? -
+    Route::get('/order-history',[UserController::class,'getOrderHistory']); // +
 });
 
 

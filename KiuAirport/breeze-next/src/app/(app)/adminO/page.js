@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 
 
 const Admin1 = () => {
-    const {userGetAllRoutes,adminAddRoute, adminGetOrders, adminDeleteRoute, adminUpdateRoute} =
+    const {userGetOrderHistory, userGetAllRoutes,adminAddRoute, adminGetOrders, adminDeleteRoute, adminUpdateRoute} =
         useAuth({middleware:"auth"});
 
     const [data, setData] = useState(null);
@@ -30,7 +30,7 @@ const Admin1 = () => {
 
                 console.log(await adminUpdateRoute(45,start_location,end_location,104,departure_time));
 
-
+                console.log(await userGetOrderHistory())
                 // setData(result);
                 // console.log(result)
             } catch (error) {
