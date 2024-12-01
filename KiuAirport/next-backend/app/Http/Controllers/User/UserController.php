@@ -18,14 +18,19 @@ class UserController extends Controller
      * @return bool
      */
     public function buyTicket(Request $request) : bool {
-        $ticketId = $request->input('ticket_id');
-        $userId = $request->input('user_id');
-        $totalPrice = $request->input('total_price');
+
+        $user = $request->user();
+
+
+        $request->validate([
+            'ticket_id' => ['required','integer'],
+            'total_price'=>['required']
+        ]);
 
         $order = new Order([
-            'ticketId' => $ticketId,
-            'userId' => $userId,
-            'totalPrice' => $totalPrice
+            'ticketId' => $request->ticket_id,
+            'userId' => $user->id,
+            'totalPrice' => $request->totalPrice
         ]);
 
         return $this->orderService->createOrder($order);

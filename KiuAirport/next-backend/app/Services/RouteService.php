@@ -4,6 +4,7 @@ namespace App\Services;
 
 
 
+use App\Models\Route;
 use App\Repositories\RouteRepositoryInterface;
 
 class RouteService
@@ -15,8 +16,8 @@ class RouteService
         $this->routeRepository = $routeRepository;
     }
 
-    public function addRoute($route){
-        $route = $this->routeRepository->create($route);
+    public function addRoute(Route $route){
+        $this->routeRepository->create($route);
     }
 
 

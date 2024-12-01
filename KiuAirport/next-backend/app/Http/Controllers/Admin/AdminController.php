@@ -31,33 +31,28 @@ class AdminController extends Controller
 
     public function addRoute(Request $request){
 
+        Log::info($request);
 
         $request->validate([
-            'start_location' => ['required|string|max:50'],
-            'end_location' => ['required|string|max:50'],
-            'price_per_ticket' => ['required|numeric'],
+            'start_location' => ['required','string','max:50'],
+            'end_location' => ['required', 'string','max:50'],
+            'price_per_ticket' => ['required'],
         ]);
 
         Log::info($request);
 
-
-
-
         try {
-
-            Log::info('Start location:', [$request->start_location]);
-
-
             $route = Route::create([
                 'start_location' => $request->start_location,
                 'end_location' => $request->end_location,
                 'price_per_ticket' => $request->price_per_ticket,
             ]);
-        }catch(Exception $e){
+        }catch (Exception $e){
             Log::error($e->getMessage());
+
         }
 
-        return 334;
+        $this->routeService->addRoute($route);
     }
 
 

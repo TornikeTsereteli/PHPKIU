@@ -136,17 +136,23 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     }
 
-    const adminAddRoute = async (...props) =>{
+    const adminAddRoute = async (startLocation,endLocation,pricePerTicket) =>{
         await csrf();
 
-        try {
-            return axios.post('/api/admin/add-route',props);
-
-        }catch(error){
-            console.log(error.response?.status);
-            console.log(error.message);
-            return {}
+        const data = {
+            start_location: startLocation,
+            end_location: endLocation,
+            price_per_ticket: pricePerTicket,
         }
+
+        axios
+            .post('/api/admin/add-route', data)
+            .then(() => mutate())
+            .catch(error => {
+                // throw error
+
+                // setErrors(error.response.data.errors)
+            })
     }
 
 

@@ -17,9 +17,13 @@ class RouteRepository implements RouteRepositoryInterface
         return Route::find($id);
     }
 
-    public function create(array $data): bool
+    public function create(Route $route): bool
     {
-        Route::create($data);
+        Route::create([
+            'start_location' => $route->start_location,
+            'end_location' => $route->end_location,
+            'price_per_ticket' => $route->price_per_ticket,
+        ]);
         return true;
     }
 

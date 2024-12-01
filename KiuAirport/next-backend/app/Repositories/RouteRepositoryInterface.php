@@ -28,7 +28,7 @@ interface RouteRepositoryInterface
      * @param array $data
      * @return bool
      */
-    public function create(array $data): bool;
+    public function create(Route $route): bool;
 
     /**
      * Update an existing route.
