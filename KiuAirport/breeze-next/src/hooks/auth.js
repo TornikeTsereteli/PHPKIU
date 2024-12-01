@@ -180,14 +180,16 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }
 
 
-    const userBuyTicket = async () =>{
-        // await csrf();
-        //
-        // try {
-        //     await axios.post('/api/user/buy-ticket')
-        // }
+    const userBuyTicket = async (data) =>{
+        await csrf();
 
-
+        try {
+            await axios.post('/api/user/buy-ticket',data)
+        }catch (err){
+            console.log(err.response?.status);
+            console.log(err.response.data);
+            return "buying Failure"
+        }
     }
 
     const userGetTickets = async () => {
@@ -288,6 +290,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         adminAddRoute,
         adminDeleteRoute,
         adminUpdateRoute,
-        adminGetOrders
+        adminGetOrders,
+        userBuyTicket
     }
 }

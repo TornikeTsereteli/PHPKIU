@@ -3,15 +3,23 @@ import Header from '@/app/(app)/Header'
 import axios from "axios";
 import {useAuth} from "@/hooks/auth";
 import {useEffect, useState} from "react";
-
+import {useRef} from "react";
 
 const Admin1 = () => {
-    const {userGetOrderHistory, userGetAllRoutes,adminAddRoute, adminGetOrders, adminDeleteRoute, adminUpdateRoute} =
+    const hasFetched = useRef(false);
+
+
+    const {userBuyTicket,userGetOrderHistory, userGetAllRoutes,adminAddRoute, adminGetOrders, adminDeleteRoute, adminUpdateRoute} =
         useAuth({middleware:"auth"});
 
     const [data, setData] = useState(null);
 
     useEffect(() => {
+        if(hasFetched.current){
+            return;
+        }
+        hasFetched.current = true;
+
         const fetchData = async () => {
             try { // Replace with your API endpoint
                 // const result = await userGetAllRoutes();
@@ -31,6 +39,12 @@ const Admin1 = () => {
                 console.log(await adminUpdateRoute(45,start_location,end_location,104,departure_time));
 
                 console.log(await userGetOrderHistory())
+
+                const data = {
+                    1:2,
+                    2:1
+                }
+                console.log(await userBuyTicket(data));
                 // setData(result);
                 // console.log(result)
             } catch (error) {

@@ -30,23 +30,23 @@ class UserController extends Controller
      * @param Request $request
      * @return bool
      */
-//    public function buyTicket(Request $request) : bool {
-//
-//        $user = $request->user();
-//
-//        $request->validate([
-//            'ticket_id' => ['required','integer'],
-//            'total_price'=>['required']
-//        ]);
-//
-//        $order = [
-//            'ticketId' => $request->ticket_id,
-//            'userId' => $user->id,
-//            'totalPrice' => $request->totalPrice
-//        ];
-//
-//        return $this->orderService->createOrder($order);
-//    }
+    public function buyTicket(Request $request) : bool {
+        Log::info("_____________________________");
+        Log::info($request);
+        Log::info("______________________________");
+
+//        foreach ($request->all() as $key => $value) {
+//            Log::info("key" ,[$key]);
+//            Log::info("value",[$value]);
+//        }
+
+
+
+        $routes = $request->all();
+        $user_id = $request->user()->id;
+        $this->orderService->createOrder($routes,$user_id);
+        return true;
+    }
 
     public function getOrderHistory(Request $request)
     {
