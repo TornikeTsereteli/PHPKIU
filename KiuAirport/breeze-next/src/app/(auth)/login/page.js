@@ -35,13 +35,14 @@ const Login = () => {
     const submitForm = async event => {
         event.preventDefault()
 
-        login({
+         login({
             email,
             password,
             remember: shouldRemember,
             setErrors,
             setStatus,
         })
+
     }
 
     return (

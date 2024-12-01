@@ -2,15 +2,39 @@
 import Header from '@/app/(app)/Header'
 import axios from "axios";
 import {useAuth} from "@/hooks/auth";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 
 const Admin1 = () => {
-    const {logout} = useAuth({middleware:"auth"});
+    const {userGetAllRoutes,adminAddRoute} = useAuth({middleware:"auth"});
 
-    useEffect(() =>{
-        logout()
-    }, [])
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try { // Replace with your API endpoint
+                // const result = await userGetAllRoutes();
+                const start_location = "Kopitnari";
+                const end_location = "Batumi";
+                const price_per_ticket = 99;
+                console.log(await adminAddRoute({
+                    start_location: start_location,
+                    end_location: end_location,
+                    price_per_ticket: price_per_ticket
+                }));
+
+                // setData(result);
+                // console.log(result)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+
+    }, []); // Empty dependency array means it runs once on mount
+
+
 
     return (
         <>

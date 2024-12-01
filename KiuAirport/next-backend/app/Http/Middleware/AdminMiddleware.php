@@ -20,6 +20,6 @@ class AdminMiddleware
 
 //        throw new Exception(auth()->user()->isAdmin());
         // If not admin, redirect to a specific page (e.g., home or login page)
-        return redirect('/home')->with('error', 'You do not have admin access');
+        return redirect('/UnAuthorized')->with('error', 'You do not have admin access');
     }
 }

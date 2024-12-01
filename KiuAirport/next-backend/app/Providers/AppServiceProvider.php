@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Repositories\OrderRepository;
+use App\Repositories\OrderRepositoryInterface;
 use App\Repositories\RouteRepository;
 use App\Repositories\RouteRepositoryInterface;
+use App\Services\OrderService;
 use App\Services\RouteService;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
@@ -20,7 +23,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind(RouteRepositoryInterface::class, RouteRepository::class);
-//        $this->app->bind(RouteService::class);
+        $this->app->bind(RouteService::class);
+        $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(OrderService::class);
     }
 
     /**

@@ -4,5 +4,7 @@ namespace App\Repositories;
 
 interface OrderRepositoryInterface
 {
-    public function getOrders();
+    public function getOrderDetails();
+
+    public function getOrderDetailsByUserId($userId);
 }

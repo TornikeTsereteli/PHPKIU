@@ -15,6 +15,10 @@ class RouteService
         $this->routeRepository = $routeRepository;
     }
 
+    public function addRoute($route){
+        $route = $this->routeRepository->create($route);
+    }
+
 
     public function getAllRoutes(){
         return $this->routeRepository->getAll();

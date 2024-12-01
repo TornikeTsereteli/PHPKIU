@@ -37,10 +37,19 @@ Route::get('/send-test-email', function () {
     return 'Test email sent!';
 });
 
+//
+//Route::get("/test", function () {
+//    return 0;
+//});
 
-Route::get("/test", function () {
-    return 0;
+Route::get('UnAuthorized', function () {
+    return response()->json([
+        'message' => 'You are not authorized to access this resource.',
+    ], 403);
 });
+
+
+
 
 
 require __DIR__.'/auth.php';

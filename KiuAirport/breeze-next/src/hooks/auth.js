@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 import axios from '@/lib/axios'
-import { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import {useEffect} from 'react'
+import {useParams, useRouter} from 'next/navigation'
 
 export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     const router = useRouter()
@@ -92,38 +92,61 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     }
 
     const logout = async () => {
-        // if (!error) {
-        //     await axios.post('/logout').then(() => mutate())
-        // }
-        //
-        // window.location.pathname = '/login'
+        if (!error) {
+            await axios.post('/logout').then(() => mutate())
+        }
+
+        window.location.pathname = '/login'
 
         await csrf();
 
 
-        axios
-            .get('/api/test2')
-            .then(res => console.log(res.data))
-            .catch(error => {
-                if (error.response.status !== 409) throw error
-                console.log("from useSWR")
-                // router.push('/verify-email')
-            })
     }
 
     const test2 = async () => {
         await csrf();
 
 
-        axios
-            .get('/api/test2')
-            .then(res => console.log(res.data))
-            .catch(error => {
-                if (error.response.status !== 409) throw error
-                console.log("from useSWR")
-                // router.push('/verify-email')
-            })
+        await csrf(); // Ensure this is resolved first.
 
+        try {
+            const response = await axios.get('/api/test2');
+            console.log(response.data);
+            return 23; // Return the desired result.
+        } catch (error) {
+            if (error.response?.status !== 409) throw error; // Re-throw other errors.
+            console.log("from useSWR");
+            return {}; // Handle specific cases and return accordingly.
+        }
+
+    }
+
+    const userGetAllRoutes = async () => {
+        await csrf();
+
+
+
+        try {
+            return await axios.get('/api/user/routes');
+        } catch (error) {
+            console.log(error.response?.status);
+            console.log(error.message);
+            return {};
+        }
+
+    }
+
+    const adminAddRoute = async (...props) =>{
+        await csrf();
+
+        try {
+            return axios.post('/api/admin/add-route',props);
+
+        }catch(error){
+            console.log(error.response?.status);
+            console.log(error.message);
+            return {}
+        }
     }
 
 
@@ -143,24 +166,29 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         // }
 
         if (user && middleware === 'auth' && !user?.email_verified_at) {
-            console.log(user)
-            console.log(Date.now())
+            // console.log(user)
+            // console.log(Date.now())
             // console.log("fromn gsfgsdgs")
             router.push('/verify-email')
         }
 
-        if(user) {
-            console.log(user);
-
-            axios
-                .get('/api/test2')
-                .then(res => console.log(res.data))
-                .catch(error => {
-                    if (error.response.status !== 409) throw error
-                    console.log("from useSWR")
-                    // router.push('/verify-email')
-                })
-        }
+        // if(user) {
+        //     // console.log(user);
+        //
+        //     axios
+        //         .get('/api/test2')
+        //         .then(res => {
+        //                 // console.log(res.data);
+        //                 return res;
+        //             }
+        //         )
+        //         .catch(error => {
+        //             if (error.response.status !== 409) throw error
+        //             console.log("from useSWR")
+        //             return null;
+        //             // router.push('/verify-email')
+        //         })
+        // }
 
         if (
             window.location.pathname === '/verify-email' &&
@@ -170,6 +198,12 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         if (middleware === 'auth' && error) logout()
     }, [user, error])
 
+
+    const test3 = () => {
+        return 5;
+    }
+
+
     return {
         user,
         register,
@@ -178,5 +212,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         resetPassword,
         resendEmailVerification,
         logout,
+        test2,
+        test3,
+        userGetAllRoutes,
+        adminAddRoute,
     }
 }

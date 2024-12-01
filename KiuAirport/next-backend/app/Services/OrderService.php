@@ -12,7 +12,11 @@ class OrderService
         $this->orderRepository = $orderRepository;
     }
 
-    public function getOrders(){
-        return $this->orderRepository->getOrders();
+    public function getOrdersDetails(){
+        return $this->orderRepository->getOrderDetails();
+    }
+
+    public function getOrderDetailsByUserId($UserId){
+        return $this->orderRepository->getOrderDetailsByUserId($UserId);
     }
 }
