@@ -2,8 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Models\Order;
 use function PHPSTORM_META\map;
+
+use App\Models\Order;
 
 class OrderRepository implements OrderRepositoryInterface
 {
@@ -36,9 +37,16 @@ class OrderRepository implements OrderRepositoryInterface
         });
     }
 
-    public function createOrder(array $data)
+    public function createOrder($order)
     {
-        return Order::create($data);
+        Order::create([
+            'ticket_id' => $order -> ticket_id,
+            'user_id' => $order -> user_id,
+            'total_price' => $order -> total_price
+        ]);
+
+        return true;
+
     }
 
     public function countOrderByUserId($UserId){

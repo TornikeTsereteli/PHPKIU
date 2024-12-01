@@ -26,11 +26,6 @@ class RouteService
     }
 
 
-    public function getRoutesByName($from)
-    {
-
-    }
-    // route // start_location, end_location
     public function deleteRoute($RouteDto){
 
     }
@@ -40,5 +35,4 @@ class RouteService
     {
 
     }
-
 }
