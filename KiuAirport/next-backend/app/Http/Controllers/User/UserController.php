@@ -1,21 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace app\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Services\RouteService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
-    protected $routeServicve;
 
-    public function __construct(RouteService $routeServicve){
-        $this->routeServicve = $routeServicve;
+    /**
+     *  Takes
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function buyTicket(Request $request) : bool {
+        return false;
     }
 
-    public function getRoutes(Request $request){
-        return $this->routeServicve->getAllRoutes();
+
+    /**
+     *
+     * @param Request $request
+     * @return int
+     */
+    public function countTicketsByUserId(Request $request) : int {
+        return 1;
     }
 
 

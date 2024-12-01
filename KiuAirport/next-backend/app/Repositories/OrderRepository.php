@@ -35,4 +35,13 @@ class OrderRepository implements OrderRepositoryInterface
             ];
         });
     }
+
+    public function createOrder(array $data)
+    {
+        return Order::create($data);
+    }
+
+    public function countOrderByUserId($UserId){
+        return Order::where(['user_id' => $UserId])->count();
+    }
 }

@@ -29,6 +29,7 @@ class TicketRepository implements TicketRepositoryInterface
 
     public function getTicketById(int $ticketId)
     {
+
     }
 
     public function updateTicketStatus(int $ticketId, string $status)
@@ -40,4 +41,6 @@ class TicketRepository implements TicketRepositoryInterface
     {
         Ticket::destroy($ticketId);
     }
+
+
 }
