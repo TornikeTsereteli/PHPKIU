@@ -16,8 +16,8 @@ class RouteService
         $this->routeRepository = $routeRepository;
     }
 
-    public function addRoute(Route $route){
-        $this->routeRepository->create($route);
+    public function addRoute(array $routeData){
+        $this->routeRepository->create($routeData);
     }
 
 

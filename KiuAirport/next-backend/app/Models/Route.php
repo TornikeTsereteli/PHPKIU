@@ -15,7 +15,8 @@ class Route extends Model
     protected $fillable = [
         'start_location',
         'end_location',
-        'price_per_ticket'
+        'price_per_ticket',
+        'departure_time'
     ];
 
 
@@ -25,7 +26,8 @@ class Route extends Model
         return [
             'start_location' => 'string',
             'end_location' => 'string',
-            'price_per_ticket' => 'float'
+            'price_per_ticket' => 'float',
+            'departure_time' => 'datetime'
         ];
     }
 }

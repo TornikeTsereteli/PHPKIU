@@ -121,6 +121,27 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     }
 
+
+    const adminAddRoute = async (startLocation,endLocation,pricePerTicket,departure_time) =>{
+        await csrf();
+
+        const data = {
+            start_location: startLocation,
+            end_location: endLocation,
+            price_per_ticket: pricePerTicket,
+            departure_time: departure_time
+        }
+
+        axios
+            .post('/api/admin/add-route', data)
+            .then(() => mutate())
+            .catch(error => {
+                // throw error
+
+                // setErrors(error.response.data.errors)
+            })
+    }
+
     const userGetAllRoutes = async () => {
         await csrf();
 
@@ -136,25 +157,28 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     }
 
-    const adminAddRoute = async (startLocation,endLocation,pricePerTicket) =>{
-        await csrf();
 
-        const data = {
-            start_location: startLocation,
-            end_location: endLocation,
-            price_per_ticket: pricePerTicket,
-        }
+    const userBuyTicket = async () =>{
+        // await csrf();
+        //
+        // try {
+        //     await axios.post('/api/user/buy-ticket')
+        // }
 
-        axios
-            .post('/api/admin/add-route', data)
-            .then(() => mutate())
-            .catch(error => {
-                // throw error
 
-                // setErrors(error.response.data.errors)
-            })
     }
 
+    const userGetTickets = async () => {
+        await csrf();
+
+        try {
+            return await axios.post('/api/user/tickets')
+        }catch(error) {
+            console.log(error.response?.status);
+            console.log(error.message);
+            throw error;
+        }
+    }
 
 
     useEffect(() => {

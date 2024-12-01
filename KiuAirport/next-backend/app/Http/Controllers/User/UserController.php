@@ -21,26 +21,23 @@ class UserController extends Controller
 
         $user = $request->user();
 
-
         $request->validate([
             'ticket_id' => ['required','integer'],
             'total_price'=>['required']
         ]);
 
-        $order = new Order([
+        $order = [
             'ticketId' => $request->ticket_id,
             'userId' => $user->id,
             'totalPrice' => $request->totalPrice
-        ]);
+        ];
 
         return $this->orderService->createOrder($order);
     }
 
     public function getAllTickets(Request $request) : array {
-        $userId = $request->input('user_id');
-
-        return $this->orderService->getOrderDetailsByUserId($userId);
+        $user = $request->user();
+        return $this->orderService->getOrderDetailsByUserId($user->id);
     }
-
 
 }

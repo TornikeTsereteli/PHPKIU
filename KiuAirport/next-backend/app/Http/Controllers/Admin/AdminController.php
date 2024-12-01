@@ -29,38 +29,34 @@ class AdminController extends Controller
         return $this->routeService->getAllRoutes();
     }
 
-    public function addRoute(Request $request){
+    public function addRoute(Request $request)
+    {
 
-        Log::info($request);
+        Log::info("trying validating request data ... ", [$request]);
 
         $request->validate([
-            'start_location' => ['required','string','max:50'],
-            'end_location' => ['required', 'string','max:50'],
+            'start_location' => ['required', 'string', 'max:50'],
+            'end_location' => ['required', 'string', 'max:50'],
             'price_per_ticket' => ['required'],
+            'departure_time' => [],
         ]);
 
-        Log::info($request);
+        Log::info("request is validated");
 
+        Log::info("trying to create routeData ... ");
+        $routeData = [
+            'start_location' => $request->start_location,
+            'end_location' => $request->end_location,
+            'price_per_ticket' => $request->price_per_ticket,
+            'departure_time' => $request->departure_time
+        ];
+
+        Log::info("trying to sent data ... ", $routeData);
         try {
-            $route = Route::create([
-                'start_location' => $request->start_location,
-                'end_location' => $request->end_location,
-                'price_per_ticket' => $request->price_per_ticket,
-            ]);
+            $this->routeService->addRoute($routeData);
         }catch (Exception $e){
-            Log::error($e->getMessage());
-
+            Log::error("failed to add route");
         }
-
-        $this->routeService->addRoute($route);
-    }
-
-
-    public function adminTest(Request $request ) : int
-    {
-        $user = $request->user();
-
-        return $user->id;
     }
 
     public function updateRoute(Request $request){

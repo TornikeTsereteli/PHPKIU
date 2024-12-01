@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Route;
+use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class RouteRepository implements RouteRepositoryInterface
 {
@@ -17,14 +19,15 @@ class RouteRepository implements RouteRepositoryInterface
         return Route::find($id);
     }
 
-    public function create(Route $route): bool
+    public function create(array $routeData): bool
     {
-        Route::create([
-            'start_location' => $route->start_location,
-            'end_location' => $route->end_location,
-            'price_per_ticket' => $route->price_per_ticket,
-        ]);
-        return true;
+        try {
+            Route::create($routeData);
+            return true;
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return false;
+        }
     }
 
     public function update(int $id, array $data): bool

@@ -24,6 +24,8 @@ Route::middleware(['auth:sanctum',AdminMiddleware::class])->get('/test4', functi
 
 Route::prefix('user')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/routes',[UserController::class,'getRoutes']);
+    Route::post('/buy-ticket',[UserController::class,'buyTicket']);
+    Route::get('/tickets',[UserController::class,'getAllTickets']);
 });
 
 
@@ -32,4 +34,5 @@ Route::prefix('admin')->middleware(['auth:sanctum',AdminMiddleware::class])->gro
     Route::post('/add-route',[AdminController::class,'addRoute']);
     Route::post('/delete-route',[AdminController::class,'deleteRoute']);
     Route::post('/update-route',[AdminController::class,'updateRoute']);
+    Route::get('/orders',[AdminController::class,'getAllOrdersDetails']);
 });

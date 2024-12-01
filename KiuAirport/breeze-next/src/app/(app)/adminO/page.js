@@ -17,7 +17,8 @@ const Admin1 = () => {
                 const start_location = "Kopitnari";
                 const end_location = "Batumi";
                 const price_per_ticket = 99;
-                console.log(await adminAddRoute(start_location, end_location, price_per_ticket));
+                const departure_time = "2024-12-1 14:00:00";
+                console.log(await adminAddRoute(start_location, end_location, price_per_ticket,departure_time));
 
                 // setData(result);
                 // console.log(result)
