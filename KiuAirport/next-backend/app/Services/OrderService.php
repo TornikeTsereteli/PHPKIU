@@ -24,7 +24,7 @@ class OrderService
     }
 
     public function createOrder($order) {
-        $userId = $order['user_id'];
+        $userId = $order->user_id;
         if ($this->orderRepository->countOrderByUserId($userId) >= 3) {
             throw new \Exception("You can't buy more than 3 tickets");
         }
