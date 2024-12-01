@@ -8,15 +8,71 @@ import ResponsiveNavLink, {
 import { DropdownButton } from '@/components/DropdownLink'
 import { useAuth } from '@/hooks/auth'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import CartItem from './dashboard/cartItem'
+import { CartContext } from './layout'
 
-const Navigation = ({ user }) => {
+const Navigation = ({ user, ticketQuantity }) => {
     const { logout } = useAuth()
 
+    const cartContext = useContext(CartContext)
+
     const [open, setOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
+
+    const toggleDropdown = () => {
+        setIsOpen(prev => !prev)
+    }
+
+    const removeTicketByID = id => {
+        cartContext.setError(null)
+        let newobj = { ...cartContext.cartProducts }
+        if (newobj[id].length == 1) {
+            delete newobj[id]
+            cartContext.setTicketQuantity(prev => prev - 1)
+        } else {
+            newobj[id].pop()
+            cartContext.setTicketQuantity(prev => prev - 1)
+        }
+        cartContext.setCartProducts(newobj)
+        console.log(cartContext.cartProducts)
+    }
+    const addTicketByID = id => {
+        cartContext.setError(null)
+        if (cartContext.ticketQuantity < 3) {
+            let newobj = { ...cartContext.cartProducts }
+            let newArrElement = newobj[id][0]
+            let newEl = { ...newArrElement }
+            newobj[id].push(newEl)
+            cartContext.setCartProducts(newobj)
+            cartContext.setTicketQuantity(prev => prev + 1)
+        }
+    }
+
+    const renderCartProducts = prods => {
+        const result = []
+        const products = prods
+        Object.keys(products).forEach(key => {
+            let count = products[key].length
+            let element = products[key][0]
+            result.push(
+                <CartItem
+                    key={element.route_id}
+                    id={element.route_id}
+                    start_location={element.start_location}
+                    count={count}
+                    price={element.price_per_ticket * count}
+                    removeTicketByID={removeTicketByID}
+                    addTicketByID={addTicketByID}
+                    setError={cartContext.setError}
+                />,
+            )
+        })
+        return result
+    }
 
     return (
-        <nav className="bg-white border-b border-gray-100">
+        <nav className="bg-transparent  ">
             {/* Primary Navigation Menu */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
@@ -33,13 +89,40 @@ const Navigation = ({ user }) => {
                             <NavLink
                                 href="/dashboard"
                                 active={usePathname() === '/dashboard'}>
-                                Dashboard
+                                Tickets
                             </NavLink>
                         </div>
                     </div>
 
                     {/* Settings Dropdown */}
                     <div className="hidden sm:flex sm:items-center sm:ml-6">
+                        <button onClick={toggleDropdown}>
+                            <img
+                                className="max-h-7 fill-white"
+                                src="https://www.clipartmax.com/png/middle/334-3348736_shopping-cart-svg-png-icon-free-download-shopping-cart-icon-svg.png"
+                            />
+                            <p>{ticketQuantity}</p>
+                        </button>
+                        {isOpen && (
+                            <div className="absolute right-32 top-10  mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
+                                <ul className="p-4 flex flex-col items-center">
+                                    {ticketQuantity > 0 ? (
+                                        renderCartProducts(
+                                            cartContext.cartProducts,
+                                        )
+                                    ) : (
+                                        <li className="text-xs">
+                                            cart is empty
+                                        </li>
+                                    )}
+                                </ul>
+                                <div className="p-4 text-center">
+                                    <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300">
+                                        Checkout
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                         <Dropdown
                             align="right"
                             width="48"

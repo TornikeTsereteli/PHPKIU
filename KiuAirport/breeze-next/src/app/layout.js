@@ -8,8 +8,10 @@ const nunitoFont = Nunito({
 
 const RootLayout = ({ children }) => {
     return (
-        <html lang="en" className={nunitoFont.className}>
-            <body className="antialiased">{children}</body>
+        <html lang="en" className={nunitoFont.className + ''}>
+            <body className="antialiased bg-wallpaper bg-cover bg-center">
+                {children}
+            </body>
         </html>
     )
 }
