@@ -2,7 +2,13 @@ import { useState } from 'react'
 import ReactDOM from 'react-dom'
 import Details from './portal'
 
-const Trip = ({ route_id, start_location, end_location, price_per_ticket }) => {
+const Trip = ({
+    route_id,
+    start_location,
+    end_location,
+    price_per_ticket,
+    departure_time,
+}) => {
     const [isPortalOpen, setIsPortalOpen] = useState(false)
 
     const portalHandler = () => {
@@ -31,6 +37,7 @@ const Trip = ({ route_id, start_location, end_location, price_per_ticket }) => {
                         end_location={end_location}
                         price_per_ticket={price_per_ticket}
                         portalHandler={portalHandler}
+                        departure_time={departure_time}
                     />,
                     document.body,
                 )}
