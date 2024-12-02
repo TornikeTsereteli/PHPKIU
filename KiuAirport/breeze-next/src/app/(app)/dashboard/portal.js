@@ -12,8 +12,11 @@ const Details = ({
     const contextVal = useContext(CartContext)
     const [tickets, setTickets] = useState(0)
 
-    const departure_day = new Date(departure_time).getDay()
+    const dt = new Date(departure_time)
+
+    const departure_day = String(dt.getUTCDate()).padStart(2, '0')
     const departure_month = new Date(departure_time).getUTCMonth()
+    const departure_year = dt.getUTCFullYear()
     const departure_hour = new Date(departure_time).getUTCHours()
 
     const addTicket = () => {
@@ -21,6 +24,7 @@ const Details = ({
             return
         }
         setTickets(prev => prev + 1)
+        contextVal.setError('')
         if (contextVal.tickets === 3) {
             contextVal.setError('Cart is full')
         }
@@ -30,12 +34,14 @@ const Details = ({
         if (tickets < 1) {
             return
         }
+        contextVal.setError('')
         setTickets(prev => prev - 1)
     }
 
     const appendTickets = () => {
         const sum = contextVal.ticketQuantity + tickets
         if (sum < 4 && tickets > 0) {
+            contextVal.setError('')
             for (let i = 0; i < tickets; i++) {
                 contextVal.addTicket(contextVal.ticketQuantity + tickets)
                 const addToCart = {
@@ -54,6 +60,7 @@ const Details = ({
                     data[route_id] = [addToCart]
                     contextVal.setCartProducts(data)
                 }
+
                 setTickets(0)
             }
         } else if (sum > 3) {
@@ -71,10 +78,11 @@ const Details = ({
         <div
             onClick={e => e.stopPropagation()}
             className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-8 rounded-lg shadow-2xl h-2/5 w-1/4 flex flex-col justify-between items-center space-y-4">
+            <div className="bg-white p-8 rounded-lg shadow-2xl h-2/5 w-1/4 flex flex-col justify-between items-center space-y-4 h-auto">
                 {/* Title */}
                 <h2 className="text-xl font-semibold text-orange-500">
-                    Departure Day: {departure_day}
+                    Departure Day: {departure_day} / {departure_month} /{' '}
+                    {departure_year}
                 </h2>
                 {/* Departure Info */}
                 <h2 className="text-md text-gray-700">
@@ -86,9 +94,9 @@ const Details = ({
                     {end_location}
                 </h3>
                 {/* Error Message */}
-                <div className="max-h-1">
+                <div className="h-2">
                     {contextVal.error && (
-                        <p className="text-red-500 text-xs max-h-max">
+                        <p className="text-red-500 text-xs h-1 max-h-1">
                             {contextVal.error}
                         </p>
                     )}

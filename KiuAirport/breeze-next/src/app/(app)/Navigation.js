@@ -62,6 +62,7 @@ const Navigation = ({ user, ticketQuantity }) => {
                     key={element.route_id}
                     id={element.route_id}
                     start_location={element.start_location}
+                    end_location={element.end_location}
                     count={count}
                     price={element.price_per_ticket * count}
                     removeTicketByID={removeTicketByID}
@@ -74,10 +75,10 @@ const Navigation = ({ user, ticketQuantity }) => {
     }
 
     return (
-        <nav className="bg-transparent  ">
+        <nav className="bg-transparent ">
             {/* Primary Navigation Menu */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
+                <div className="flex justify-between h-16 top-0 z-50">
                     <div className="flex">
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center">
@@ -106,20 +107,20 @@ const Navigation = ({ user, ticketQuantity }) => {
                             <p>{ticketQuantity}</p>
                         </button>
                         {isOpen && (
-                            <div className="absolute right-32 top-10  mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-                                <ul className="p-4 flex flex-col items-center">
+                            <div className="absolute right-32 top-10 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
+                                <ul className="p-4 space-y-2">
                                     {ticketQuantity > 0 ? (
                                         renderCartProducts(
                                             cartContext.cartProducts,
                                         )
                                     ) : (
-                                        <li className="text-xs">
-                                            cart is empty
+                                        <li className="text-sm text-gray-500 text-center">
+                                            Cart is empty
                                         </li>
                                     )}
                                 </ul>
-                                <div className="p-4 text-center">
-                                    <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300">
+                                <div className="p-4 border-t border-gray-200">
+                                    <button className="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300">
                                         Checkout
                                     </button>
                                 </div>

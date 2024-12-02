@@ -29,7 +29,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <Header title="Tickets" />
+            {/* <Header title="Tickets" /> */}
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden  sm:rounded-lg flex flex-wrap justify-around bg-transparent">
@@ -41,6 +41,7 @@ const Dashboard = () => {
                                 end_location={route.end_location}
                                 price_per_ticket={route.price_per_ticket}
                                 departure_time={route.departure_time}
+                                active={true}
                             />
                         ))}
                     </div>

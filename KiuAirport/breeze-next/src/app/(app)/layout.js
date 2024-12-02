@@ -12,6 +12,7 @@ const AppLayout = ({ children }) => {
     const [cartProducts, setCartProducts] = useState({})
     const [error, setError] = useState(null)
 
+    console.log(cartProducts)
     const addTicket = val => {
         setTicketQuantity(val)
     }
@@ -46,7 +47,7 @@ const AppLayout = ({ children }) => {
         <CartContext.Provider value={contextVar}>
             <div className="min-h-screen ">
                 <Navigation user={user} ticketQuantity={ticketQuantity} />
-                <main>{children}</main>
+                <main className="flex flex-row justify-around">{children}</main>
             </div>
         </CartContext.Provider>
     )

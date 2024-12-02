@@ -40,7 +40,16 @@ class UserController extends Controller
 
     public function getRoutes(Request $request)
     {
-        return $this->routeService->getAllRoutes();
+        return $this->routeService->getAllRoutes()->map(function ($route){
+            return [
+                'id' => $route->id,
+                'start_location' => $route->start_location,
+                'end_location' => $route->end_location,
+                'price_per_ticket' => $route->price_per_ticket,
+                'departure_time' => $route->departure_time
+            ];
+        });
+        ;
     }
 
 }

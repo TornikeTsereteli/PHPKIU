@@ -8,18 +8,20 @@ const Trip = ({
     end_location,
     price_per_ticket,
     departure_time,
+    active,
+    deleteRoute,
 }) => {
     const [isPortalOpen, setIsPortalOpen] = useState(false)
 
     const portalHandler = () => {
-        setIsPortalOpen(!isPortalOpen)
+        active ? setIsPortalOpen(!isPortalOpen) : null
     }
     return (
-        <button
+        <div
             onClick={portalHandler}
             className="mb-4 relative w-64 h-64 bg-white rounded-lg overflow-hidden">
             <img
-                src="/Users/nikolozchiradze/project-airport/PHPKIU/KiuAirport/breeze-next/src/components/background-with-plane-blank-space-father-s-day.jpg"
+                src="https://img.freepik.com/premium-vector/school-bus-image-cartoon_844724-276.jpg"
                 alt="Button Image"
                 className="w-full h-full object-cover"
             />
@@ -27,6 +29,17 @@ const Trip = ({
                 <p className="text-sm">
                     {start_location + '->' + end_location}{' '}
                 </p>
+                {active == false ? (
+                    <button
+                        onClick={() => {
+                            deleteRoute(route_id)
+                        }}
+                        className="bg-black">
+                        delete
+                    </button>
+                ) : (
+                    ''
+                )}
             </div>
 
             {isPortalOpen &&
@@ -41,7 +54,7 @@ const Trip = ({
                     />,
                     document.body,
                 )}
-        </button>
+        </div>
     )
 }
 
