@@ -49,7 +49,7 @@ class UserController extends Controller
                 'departure_time' => $route->departure_time
             ];
         });
-        ;
+
     }
 
 }

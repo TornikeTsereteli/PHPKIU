@@ -26,7 +26,7 @@ class RouteRepository implements RouteRepositoryInterface
     public function getById(int $id): Route
     {
         try {
-            Log::info('Trying to get Route by id = ' + $id);
+            Log::info('Trying to get Route by id = ', [$id]);
             $result = Route::find($id);
 
             Log::info('Route fetched successfully');
@@ -37,22 +37,22 @@ class RouteRepository implements RouteRepositoryInterface
         }
     }
 
-    public function create(array $routeData): bool
+    public function create(array $routeData): int
     {
         try {
             Log::info('Trying to create a new route.', ['route_data' => $routeData]);
 
-            Route::create($routeData);
+            $route = Route::create($routeData);
             Log::info('Route created successfully.', ['route_data' => $routeData]);
 
-            return true;
+            return $route->id;
         } catch (\Exception $e) {
             Log::error('Failed to create route.', [
                 'route_data' => $routeData,
                 'error' => $e->getMessage(),
             ]);
 
-            return false;
+            return -1;
         }
     }
 
