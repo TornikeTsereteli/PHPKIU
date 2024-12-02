@@ -55,11 +55,9 @@ class AdminController extends Controller
         ];
 
         Log::info("trying to sent data ... ", $routeData);
-        try {
-            $this->routeService->addRoute($routeData);
-        }catch (Exception $e){
-            Log::error("failed to add route");
-        }
+
+        return $this->routeService->addRoute($routeData);
+
     }
 
     public function updateRoute(Request $request){
@@ -81,7 +79,7 @@ class AdminController extends Controller
         ];
 
 
-        $this->routeService->updateRoute($request->id,$routeData);
+        return $this->routeService->updateRoute($request->id,$routeData);
     }
 
     public function deleteRoute(Request $request)
@@ -90,7 +88,7 @@ class AdminController extends Controller
             'id'=> ['required','int'],
         ]);
 
-        $this->routeService->deleteRoute($request->id);
+        return $this->routeService->deleteRoute($request->id);
     }
 
     public function getAllOrdersDetails(Request $request)

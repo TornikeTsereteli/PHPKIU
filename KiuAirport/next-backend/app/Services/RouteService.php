@@ -6,6 +6,8 @@ namespace App\Services;
 
 use App\Models\Route;
 use App\Repositories\RouteRepositoryInterface;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class RouteService implements RouteServiceInterface
 {
@@ -16,8 +18,8 @@ class RouteService implements RouteServiceInterface
         $this->routeRepository = $routeRepository;
     }
 
-    public function addRoute(array $routeData){
-        $this->routeRepository->create($routeData);
+    public function addRoute(array $routeData) : bool{
+        return $this->routeRepository->create($routeData);
     }
 
 
@@ -25,13 +27,13 @@ class RouteService implements RouteServiceInterface
         return $this->routeRepository->getAll();
     }
 
-    public function deleteRoute($id){
+    public function deleteRoute($id) : bool{
         return $this->routeRepository->delete($id);
     }
 
-    public function updateRoute($id, array $routeData)
+    public function updateRoute($id, array $routeData) : bool
     {
-        $this->routeRepository->update($id, $routeData);
+        return $this->routeRepository->update($id, $routeData);
     }
 
 }
