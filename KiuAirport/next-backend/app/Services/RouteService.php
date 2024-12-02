@@ -7,10 +7,10 @@ namespace App\Services;
 use App\Models\Route;
 use App\Repositories\RouteRepositoryInterface;
 
-class RouteService
+class RouteService implements RouteServiceInterface
 {
 
-    protected $routeRepository;
+    protected RouteRepositoryInterface $routeRepository;
 
     public function __construct(RouteRepositoryInterface $routeRepository){
         $this->routeRepository = $routeRepository;
@@ -25,17 +25,10 @@ class RouteService
         return $this->routeRepository->getAll();
     }
 
-
-    public function getRoutesByName($from)
-    {
-
-    }
-    // route // start_location, end_location
     public function deleteRoute($id){
         return $this->routeRepository->delete($id);
     }
 
-    // start_location, end_location, price_per_ticket
     public function updateRoute($id, array $routeData)
     {
         $this->routeRepository->update($id, $routeData);

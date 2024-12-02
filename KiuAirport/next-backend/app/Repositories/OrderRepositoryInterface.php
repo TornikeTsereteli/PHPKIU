@@ -8,5 +8,4 @@ interface OrderRepositoryInterface
 
     public function getOrderDetailsByUserId($userId);
     public function createOrder(array $data);
-    public function countOrderByUserId($UserId);
 }

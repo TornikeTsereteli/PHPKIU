@@ -7,7 +7,9 @@ use App\Models\Route;
 use App\Repositories\RouteRepository;
 use App\Repositories\RouteRepositoryInterface;
 use App\Services\OrderService;
+use App\Services\OrderServiceInterface;
 use App\Services\RouteService;
+use App\Services\RouteServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,10 +18,10 @@ use function Pest\Laravel\json;
 
 class AdminController extends Controller
 {
-    protected RouteService $routeService;
-    protected OrderService $orderService;
+    protected RouteServiceInterface $routeService;
+    protected OrderServiceInterface $orderService;
 
-    public function __construct(RouteService $routeService, OrderService $orderService)
+    public function __construct(RouteServiceInterface $routeService, OrderServiceInterface $orderService)
     {
         $this->routeService = $routeService;
         $this->orderService = $orderService;

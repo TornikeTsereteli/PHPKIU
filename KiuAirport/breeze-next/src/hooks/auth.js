@@ -184,7 +184,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         await csrf();
 
         try {
-            await axios.post('/api/user/buy-ticket',data)
+            return await axios.post('/api/user/buy-ticket',data)
         }catch (err){
             console.log(err.response?.status);
             console.log(err.response.data);

@@ -42,7 +42,5 @@ class OrderRepository implements OrderRepositoryInterface
         return Order::create($data);
     }
 
-    public function countOrderByUserId($UserId){
-        return Order::where(['user_id' => $UserId])->count();
-    }
+
 }

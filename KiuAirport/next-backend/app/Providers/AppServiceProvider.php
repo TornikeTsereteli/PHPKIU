@@ -12,6 +12,7 @@ use App\Repositories\TicketRepositoryInterface;
 use App\Services\OrderService;
 use App\Services\OrderServiceInterface;
 use App\Services\RouteService;
+use App\Services\RouteServiceInterface;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -26,10 +27,10 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind(RouteRepositoryInterface::class, RouteRepository::class);
-        $this->app->bind(RouteService::class);
+        $this->app->bind(RouteServiceInterface::class,RouteService::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(TicketRepositoryInterface::class, TicketRepository::class);
-        $this->app->bind(OrderService::class);
+        $this->app->bind(OrderServiceInterface::class,OrderService::class);
 
     }
 

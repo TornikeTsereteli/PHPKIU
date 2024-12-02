@@ -7,7 +7,6 @@ use App\Models\Order;
 interface OrderServiceInterface
 {
     public function getOrdersDetails();
-    public function getOrderDetails(int $orderId);
-    public function createOrder(Order $order);
+    public function createOrder(array $routes,int $userId);
     public function getOrderDetailsByUserId($UserId);
 }
