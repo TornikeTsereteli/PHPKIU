@@ -25,11 +25,27 @@ class OrderService implements OrderServiceInterface
     }
 
     public function getOrdersDetails(){
-        return $this->orderRepository->getOrderDetails();
+        try {
+            Log::info('Service: Trying to get the orders details');
+            return $this->orderRepository->getOrderDetails();
+        }  catch (Exception $e) {
+            Log::error('Failed to get order details', ['error' => $e->getMessage()]);
+
+            throw $e;
+        }
     }
 
     public function getOrderDetailsByUserId($UserId){
-        return $this->orderRepository->getOrderDetailsByUserId($UserId);
+        try {
+            Log::info('OrderService: Trying to get the order details by user id');
+            $orderDetails = $this->orderRepository->getOrderDetailsByUserId($UserId);
+            Log::info('OrderService: Order details retrieved successfully', ['orderDetails' => $orderDetails]);
+            return $orderDetails;
+        } catch (Exception $e) {
+            Log::error('OrderService: Failed to get order details', ['error' => $e->getMessage()]);
+
+            throw $e;
+        }
     }
 
 
