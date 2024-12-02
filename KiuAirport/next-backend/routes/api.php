@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\GlobalExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +36,12 @@ Route::prefix('admin')->middleware(['auth:sanctum',AdminMiddleware::class])->gro
     Route::post('/delete-route',[AdminController::class,'deleteRoute']); // +
     Route::post('/update-route',[AdminController::class,'updateRoute']);  // +
     Route::get('/orders',[AdminController::class,'getAllOrdersDetails']); // + but have unexpected behaviour if ticketId didnot exist so maybe I should do inner join not left
+});
+
+
+Route::middleware([GlobalExceptionHandler::class])->group(function () {
+    Route::get('/test', function (Request $request) {
+        throw new Exception("global Exception handler");
+        return 1;
+    });
 });

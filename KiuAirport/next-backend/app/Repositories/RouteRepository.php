@@ -34,7 +34,8 @@ class RouteRepository implements RouteRepositoryInterface
     {
         $route = Route::find($id);
         if ($route) {
-            return $route->update($data);
+            $route->update($data);
+            return true;
         }
         return false;
     }

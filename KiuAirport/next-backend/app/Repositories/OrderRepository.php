@@ -11,15 +11,17 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function getOrderDetails()
     {
-           return Order::with(['ticket.route', 'user'])->get()->map(function ($order) {
-               return [
-                   'name' => $order->user->name,
-                   'start_location' => $order->ticket->route->start_location,
-                   'end_location' => $order->ticket->route->end_location,
-                   'quantity' => $order->ticket->quantity,
-                   'total_price' => $order->total_price,
-               ];
-           });
+           return  Order::join('tickets', 'orders.ticket_id', '=', 'tickets.id')
+               ->join('routes', 'tickets.route_id', '=', 'routes.id')
+               ->join('users', 'orders.user_id', '=', 'users.id')
+               ->select(
+                   'users.name as user_name',
+                   'routes.start_location',
+                   'routes.end_location',
+                   'tickets.quantity',
+                   'orders.total_price'
+               )
+               ->get();
 
 
     }
