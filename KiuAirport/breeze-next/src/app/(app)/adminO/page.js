@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 
 
 const Admin1 = () => {
-    const {userGetOrderHistory, userGetAllRoutes,adminAddRoute, adminGetOrders, adminDeleteRoute, adminUpdateRoute} =
+    const {userGetOrderHistory, userGetAllRoutes, adminAddRoute, adminGetOrders, adminDeleteRoute, adminUpdateRoute} =
         useAuth({middleware:"auth"});
 
     const [data, setData] = useState(null);

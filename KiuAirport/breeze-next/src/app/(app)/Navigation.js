@@ -49,6 +49,8 @@ const Navigation = ({ user, ticketQuantity }) => {
         }
     }
 
+    const onPurchase = () => {}
+
     const renderCartProducts = prods => {
         const result = []
         const products = prods
