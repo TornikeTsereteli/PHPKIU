@@ -1,19 +1,23 @@
 import useSWR from 'swr'
 import axios from '@/lib/axios'
-import {useEffect} from 'react'
-import {useParams, useRouter} from 'next/navigation'
+import { useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
 
 export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     const router = useRouter()
     const params = useParams()
 
-    const { data: user, error, mutate } = useSWR('/api/user', () =>
+    const {
+        data: user,
+        error,
+        mutate,
+    } = useSWR('/api/user', () =>
         axios
             .get('/api/user')
             .then(res => res.data)
             .catch(error => {
                 if (error.response.status !== 409) throw error
-                console.log("from useSWR")
+                console.log('from useSWR')
                 router.push('/verify-email')
             }),
     )
@@ -98,18 +102,12 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
         window.location.pathname = '/login'
 
-        await csrf();
-
-
+        await csrf()
     }
-
-
-
 
     useEffect(() => {
         if (middleware === 'guest' && redirectIfAuthenticated && user)
             router.push(redirectIfAuthenticated)
-
 
         // if(user == null){
         //     router.back();
@@ -153,127 +151,131 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         if (middleware === 'auth' && error) logout()
     }, [user, error])
 
-
-
-
     const userGetAllRoutes = async () => {
-        await csrf();
+        await csrf()
         try {
-            return await axios.get('/api/user/routes');
+            return await axios.get('/api/user/routes')
         } catch (error) {
-            console.log(error.response?.status);
-            console.log(error.message);
-            return {};
+            console.log(error.response?.status)
+            console.log(error.message)
+            return {}
         }
     }
 
     const userGetOrderHistory = async () => {
-        await csrf();
+        await csrf()
 
         try {
-            return await axios.get('/api/user/order-history');
-        }catch (error) {
-            console.log(error.response?.status);
-            console.log(error.message);
-            return [];
+            return await axios.get('/api/user/order-history')
+        } catch (error) {
+            console.log(error.response?.status)
+            console.log(error.message)
+            return []
         }
     }
 
-
-    const userBuyTicket = async (data) =>{
-        await csrf();
+    const userBuyTicket = async data => {
+        await csrf()
 
         try {
-            return await axios.post('/api/user/buy-ticket',data)
-        }catch (err){
-            console.log(err.response?.status);
-            console.log(err.response.data);
-            return "buying Failure"
+            return await axios.post('/api/user/buy-ticket', data)
+        } catch (err) {
+            console.log(err.response?.status)
+            console.log(err.response.data)
+            return 'buying Failure'
         }
     }
 
     const userGetTickets = async () => {
-        await csrf();
+        await csrf()
 
         try {
             return await axios.post('/api/user/tickets')
-        }catch(error) {
-            console.log(error.response?.status);
-            console.log(error.message);
-            throw error;
+        } catch (error) {
+            console.log(error.response?.status)
+            console.log(error.message)
+            throw error
         }
     }
 
-
-    const adminAddRoute = async (startLocation,endLocation,pricePerTicket,departure_time) =>{
-        await csrf();
+    const adminAddRoute = async (
+        startLocation,
+        endLocation,
+        pricePerTicket,
+        departure_time,
+    ) => {
+        await csrf()
 
         const data = {
             start_location: startLocation,
             end_location: endLocation,
             price_per_ticket: pricePerTicket,
-            departure_time: departure_time
+            departure_time: departure_time,
         }
 
         try {
-            await axios.post('/api/admin/add-route', data)
-            return "Successfully added"
-        }catch(error)
-        {
+            return await axios.post('/api/admin/add-route', data)
+        } catch (error) {
             // throw error
             console.log(error)
-            return "Error"
+            return false
             // setErrors(error.response.data.errors)
         }
     }
 
-
-    const adminDeleteRoute = async (id) =>{
-        await csrf();
+    const adminDeleteRoute = async id => {
+        await csrf()
 
         const data = {
-            id: id
+            id: id,
         }
 
         try {
-            await axios.post('/api/admin/delete-route', data);
-            return "Sucessfully deleted";
-        }catch (err){        // throw error
-                console.log(error.response?.status);
-                console.log(error.message);
-                return "Error"
+            await axios.post('/api/admin/delete-route', data)
+            return 'Sucessfully deleted'
+        } catch (err) {
+            // throw error
+            console.log(error.response?.status)
+            console.log(error.message)
+            return 'Error'
         }
     }
 
-    const adminUpdateRoute = async (id, startLocation,endLocation,pricePerTicket,departure_time) =>{
-        await csrf();
+    const adminUpdateRoute = async (
+        id,
+        startLocation,
+        endLocation,
+        pricePerTicket,
+        departure_time,
+    ) => {
+        await csrf()
 
         const data = {
-            id : id,
+            id: id,
             start_location: startLocation,
             end_location: endLocation,
             price_per_ticket: pricePerTicket,
-            departure_time: departure_time
+            departure_time: departure_time,
         }
         try {
             await axios.post('/api/admin/update-route', data)
-            return "Successfully Updated"
-        }catch(error) {
-            console.log(error.response?.status);
-            console.log(error.message);
-            return "Error"
+            return 'Successfully Updated'
+        } catch (error) {
+            console.log(error.response?.status)
+            console.log(error.message)
+            return 'Error'
         }
     }
 
     const adminGetOrders = async () => {
-        await csrf();
+        await csrf()
 
         try {
             return await axios.get('/api/admin/orders')
-        }catch(error) {
-            console.log(error.response?.status);
-            console.log(error.message);
-            return [];
+        } catch (error) {
+            console.log(error.response?.status)
+            console.log(error.message)
+            return []
         }
     }
 
@@ -291,6 +293,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         adminDeleteRoute,
         adminUpdateRoute,
         adminGetOrders,
-        userBuyTicket
+        userBuyTicket,
     }
 }

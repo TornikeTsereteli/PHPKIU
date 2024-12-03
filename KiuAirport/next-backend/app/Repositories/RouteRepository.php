@@ -19,14 +19,14 @@ class RouteRepository implements RouteRepositoryInterface
         return Route::find($id);
     }
 
-    public function create(array $routeData): bool
+    public function create(array $routeData)
     {
         try {
-            Route::create($routeData);
-            return true;
+            $route = Route::create($routeData);
+            return $route->id;
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            return false;
+            return -1;
         }
     }
 

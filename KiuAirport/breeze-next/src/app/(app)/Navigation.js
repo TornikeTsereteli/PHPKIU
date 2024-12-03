@@ -8,17 +8,49 @@ import ResponsiveNavLink, {
 import { DropdownButton } from '@/components/DropdownLink'
 import { useAuth } from '@/hooks/auth'
 import { usePathname } from 'next/navigation'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import CartItem from './dashboard/cartItem'
 import { CartContext } from './layout'
+import ReactDOM from 'react-dom'
+import TicketHPortal from './TicketHPortal'
+import TicketPortal from './TicketPortal'
 
 const Navigation = ({ user, ticketQuantity }) => {
-    const { logout } = useAuth()
+    const { logout, userBuyTicket } = useAuth()
 
     const cartContext = useContext(CartContext)
 
     const [open, setOpen] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
+    const [isTicketPortalOpen, setIsTicketPortalOpen] = useState(false)
+    const [isTicketHistoryOpen, setIsTicketHistoryOpen] = useState(false)
+
+    const ticketHistoryHandler = () => {
+        setIsTicketHistoryOpen(prev => !prev)
+    }
+
+    const handleCart = () => {
+        setIsOpen(prev => !prev)
+    }
+
+    const handleTicketPortal = () => {
+        setIsTicketPortalOpen(prev => !prev)
+    }
+
+    const handleCheckout = async () => {
+        const data = { ...cartContext.cartProducts }
+        const result = {}
+        if (Object.keys(data).length > 0) {
+            for (let key in data) {
+                result[key] = data[key].length
+            }
+            await userBuyTicket(result)
+            cartContext.setCartProducts({})
+            cartContext.setTicketQuantity(0)
+        } else {
+            console.log('No tickets')
+        }
+    }
 
     const toggleDropdown = () => {
         setIsOpen(prev => !prev)
@@ -48,8 +80,6 @@ const Navigation = ({ user, ticketQuantity }) => {
             cartContext.setTicketQuantity(prev => prev + 1)
         }
     }
-
-    const onPurchase = () => {}
 
     const renderCartProducts = prods => {
         const result = []
@@ -83,31 +113,79 @@ const Navigation = ({ user, ticketQuantity }) => {
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/dashboard">
-                                <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" />
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-12 w-12 text-orange-500"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path d="M21 16v-2l-8-5V2a1 1 0 0 0-2 0v7l-8 5v2l8-2v5l-2 2v1h6v-1l-2-2v-5l8 2z" />
+                                </svg>
                             </Link>
                         </div>
 
                         {/* Navigation Links */}
                         <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <NavLink
-                                href="/dashboard"
-                                active={usePathname() === '/dashboard'}>
-                                Tickets
-                            </NavLink>
+                            {user.isAdmin && (
+                                <NavLink
+                                    href="/dashboard"
+                                    active={usePathname() === '/dashboard'}>
+                                    Tickets
+                                </NavLink>
+                            )}
                         </div>
                     </div>
 
+                    <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        {user.is_admin && (
+                            <button
+                                onClick={ticketHistoryHandler}
+                                className="text-orange-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 focus:outline-none transition duration-150 ease-in-out">
+                                Tickets bought
+                            </button>
+                        )}
+                    </div>
+                    {isTicketHistoryOpen &&
+                        ReactDOM.createPortal(
+                            <TicketHPortal
+                                handleCart={handleCart}
+                                ticketHistoryHandler={ticketHistoryHandler}
+                            />,
+                            document.body,
+                        )}
+
                     {/* Settings Dropdown */}
                     <div className="hidden sm:flex sm:items-center sm:ml-6">
-                        <button onClick={toggleDropdown}>
-                            <img
-                                className="max-h-7 fill-white"
-                                src="https://www.clipartmax.com/png/middle/334-3348736_shopping-cart-svg-png-icon-free-download-shopping-cart-icon-svg.png"
-                            />
-                            <p>{ticketQuantity}</p>
-                        </button>
+                        {!user.is_admin && (
+                            <button onClick={toggleDropdown}>
+                                <div className="relative w-8 h-8">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 32 32"
+                                        className="w-8 h-8 text-orange-500"
+                                        fill="currentColor">
+                                        <g
+                                            id="shopping_cart"
+                                            data-name="shopping cart">
+                                            <path
+                                                className="cls-1"
+                                                d="M29.74 8.32A1 1 0 0 0 29 8H13a1 1 0 0 0 0 2h14.91l-.81 9.48a1.87 1.87 0 0 1-2 1.52H12.88a1.87 1.87 0 0 1-2-1.52L10 8.92v-.16L9.33 6.2A3.89 3.89 0 0 0 7 3.52L3.37 2.07a1 1 0 0 0-.74 1.86l3.62 1.45a1.89 1.89 0 0 1 1.14 1.3L8 9.16l.9 10.49a3.87 3.87 0 0 0 4 3.35h.1v2.18a3 3 0 1 0 2 0V23h8v2.18a3 3 0 1 0 2 0V23h.12a3.87 3.87 0 0 0 4-3.35L30 9.08a1 1 0 0 0-.26-.76zM14 29a1 1 0 1 1 1-1 1 1 0 0 1-1 1zm10 0a1 1 0 1 1 1-1 1 1 0 0 1-1 1z"
+                                            />
+                                            <path
+                                                className="cls-1"
+                                                d="M15 18v-5a1 1 0 0 0-2 0v5a1 1 0 0 0 2 0zM20 18v-5a1 1 0 0 0-2 0v5a1 1 0 0 0 2 0zM25 18v-5a1 1 0 0 0-2 0v5a1 1 0 0 0 2 0z"
+                                            />
+                                        </g>
+                                    </svg>
+                                    {/* Red Circle for Item Count */}
+                                    <span className="absolute top-0 left-6 right-0 flex justify-center items-center w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full">
+                                        {ticketQuantity}
+                                    </span>
+                                </div>
+                            </button>
+                        )}
+
                         {isOpen && (
-                            <div className="absolute right-32 top-10 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
+                            <div className="absolute right-96 top-10 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
                                 <ul className="p-4 space-y-2">
                                     {ticketQuantity > 0 ? (
                                         renderCartProducts(
@@ -120,31 +198,37 @@ const Navigation = ({ user, ticketQuantity }) => {
                                     )}
                                 </ul>
                                 <div className="p-4 border-t border-gray-200">
-                                    <button className="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300">
+                                    <button
+                                        onClick={handleCheckout}
+                                        className="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300">
                                         Checkout
                                     </button>
+                                    <button
+                                        onClick={handleTicketPortal}
+                                        className="w-full border-t-4 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300">
+                                        View my tickets
+                                    </button>
                                 </div>
+                                {isTicketPortalOpen &&
+                                    ReactDOM.createPortal(
+                                        <TicketPortal
+                                            handleCart={handleCart}
+                                            handleTicketPortal={
+                                                handleTicketPortal
+                                            }
+                                        />,
+                                        document.body,
+                                    )}
                             </div>
                         )}
                         <Dropdown
                             align="right"
                             width="48"
                             trigger={
-                                <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
+                                <button className="ml-4 text-sm text-white bg-orange-500 px-4 py-2 rounded-lg shadow hover:bg-orange-600 transition duration-200">
                                     <div>{user?.name}</div>
 
-                                    <div className="ml-1">
-                                        <svg
-                                            className="fill-current h-4 w-4"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20">
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                    </div>
+                                    <div className="ml-1"></div>
                                 </button>
                             }>
                             {/* Authentication */}

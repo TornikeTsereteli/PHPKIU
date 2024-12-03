@@ -18,7 +18,7 @@ class RouteService implements RouteServiceInterface
         $this->routeRepository = $routeRepository;
     }
 
-    public function addRoute(array $routeData) : bool{
+    public function addRoute(array $routeData){
         return $this->routeRepository->create($routeData);
     }
 

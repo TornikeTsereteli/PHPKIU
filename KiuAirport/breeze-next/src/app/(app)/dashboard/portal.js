@@ -8,6 +8,7 @@ const Details = ({
     price_per_ticket,
     portalHandler,
     departure_time,
+    forTickets,
 }) => {
     const contextVal = useContext(CartContext)
     const [tickets, setTickets] = useState(0)
@@ -78,62 +79,69 @@ const Details = ({
         <div
             onClick={e => e.stopPropagation()}
             className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-8 rounded-lg shadow-2xl h-2/5 w-1/4 flex flex-col justify-between items-center space-y-4 h-auto">
-                {/* Title */}
-                <h2 className="text-xl font-semibold text-orange-500">
-                    Departure Day: {departure_day} / {departure_month} /{' '}
-                    {departure_year}
-                </h2>
-                {/* Departure Info */}
-                <h2 className="text-md text-gray-700">
-                    Departure Hour:{' '}
-                    <span className="font-bold">{departure_hour}:00</span>
-                </h2>
-                <h3 className="text-md text-gray-700 font-medium ">
-                    {start_location} <span className="text-orange-500">→</span>{' '}
-                    {end_location}
-                </h3>
-                {/* Error Message */}
-                <div className="h-2">
-                    {contextVal.error && (
-                        <p className="text-red-500 text-xs h-1 max-h-1">
-                            {contextVal.error}
+            {forTickets ? (
+                <div className="bg-white p-8 rounded-lg shadow-2xl h-2/5 w-1/4 flex flex-col justify-between items-center space-y-4 h-auto">
+                    <div>tickets</div>
+                </div>
+            ) : (
+                <div className="bg-white p-8 rounded-lg shadow-2xl h-2/5 w-1/4 flex flex-col justify-between items-center space-y-4 h-auto">
+                    {/* Title */}
+                    <h2 className="text-xl font-semibold text-orange-500">
+                        Departure Day: {departure_day} / {departure_month} /{' '}
+                        {departure_year}
+                    </h2>
+                    {/* Departure Info */}
+                    <h2 className="text-md text-gray-700">
+                        Departure Hour:{' '}
+                        <span className="font-bold">{departure_hour}:00</span>
+                    </h2>
+                    <h3 className="text-md text-gray-700 font-medium ">
+                        {start_location}{' '}
+                        <span className="text-orange-500">→</span>{' '}
+                        {end_location}
+                    </h3>
+                    {/* Error Message */}
+                    <div className="h-2">
+                        {contextVal.error && (
+                            <p className="text-red-500 text-xs h-1 max-h-1">
+                                {contextVal.error}
+                            </p>
+                        )}
+                    </div>
+                    {/* Ticket Controls */}
+                    <div className="flex flex-row items-center space-x-4">
+                        <button
+                            onClick={minusTicket}
+                            className="px-4 py-2 bg-orange-500 text-white font-bold rounded hover:bg-orange-600">
+                            −
+                        </button>
+                        <p className="text-gray-700 font-medium">
+                            Quantity: {tickets}
                         </p>
-                    )}
-                </div>
-                {/* Ticket Controls */}
-                <div className="flex flex-row items-center space-x-4">
+                        <button
+                            onClick={addTicket}
+                            className="px-4 py-2 bg-orange-500 text-white font-bold rounded hover:bg-orange-600">
+                            +
+                        </button>
+                    </div>
+                    {/* Add to Cart Button */}
                     <button
-                        onClick={minusTicket}
-                        className="px-4 py-2 bg-orange-500 text-white font-bold rounded hover:bg-orange-600">
-                        −
+                        onClick={appendTickets}
+                        className={`mt-4 px-6 py-3 font-bold rounded ${
+                            tickets > 0
+                                ? 'bg-orange-500 text-white hover:bg-orange-600'
+                                : 'bg-orange-100 text-gray-400 cursor-not-allowed'
+                        }`}>
+                        Add to Cart
                     </button>
-                    <p className="text-gray-700 font-medium">
-                        Quantity: {tickets}
-                    </p>
+                    {/* Close Button */}
                     <button
-                        onClick={addTicket}
-                        className="px-4 py-2 bg-orange-500 text-white font-bold rounded hover:bg-orange-600">
-                        +
+                        onClick={portalHandler}
+                        className="mt-4 min-w-full px-6 py-3 bg-red-500 text-white font-bold rounded hover:bg-red-600">
+                        Close
                     </button>
                 </div>
-                {/* Add to Cart Button */}
-                <button
-                    onClick={appendTickets}
-                    className={`mt-4 px-6 py-3 font-bold rounded ${
-                        tickets > 0
-                            ? 'bg-orange-500 text-white hover:bg-orange-600'
-                            : 'bg-orange-100 text-gray-400 cursor-not-allowed'
-                    }`}>
-                    Add to Cart
-                </button>
-                {/* Close Button */}
-                <button
-                    onClick={portalHandler}
-                    className="mt-4 min-w-full px-6 py-3 bg-red-500 text-white font-bold rounded hover:bg-red-600">
-                    Close
-                </button>
-            </div>
+            )}
         </div>
     )
 }
