@@ -27,16 +27,16 @@ const Admin1 = () => {
                 const end_location = "Batumi";
                 const price_per_ticket = 99;
                 const departure_time = "2024-12-1 14:00:00";
-                console.log(await adminAddRoute(start_location, end_location, price_per_ticket,departure_time));
+                // console.log(await adminAddRoute(start_location, end_location, price_per_ticket,departure_time));
 
 
-                console.log(await userGetAllRoutes());
+                // console.log(await userGetAllRoutes());
 
-                console.log(await adminGetOrders());
+                // console.log(await adminGetOrders());
 
-                console.log(await adminDeleteRoute(35));
+                // console.log(await adminDeleteRoute(35));
 
-                console.log(await adminUpdateRoute(45,start_location,end_location,104,departure_time));
+                // console.log(await adminUpdateRoute(45,start_location,end_location,104,departure_time));
 
                 console.log(await userGetOrderHistory())
 
@@ -44,7 +44,7 @@ const Admin1 = () => {
                     1:2,
                     2:1
                 }
-                console.log(await userBuyTicket(data));
+                // console.log(await userBuyTicket(data));
                 // setData(result);
                 // console.log(result)
             } catch (error) {

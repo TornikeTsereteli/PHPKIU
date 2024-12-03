@@ -11,20 +11,20 @@ const LoginLinks = () => {
             {user ? (
                 <Link
                     href="/dashboard"
-                    className="ml-4 text-sm text-gray-700 underline">
+                    className="ml-4 text-sm text-white bg-orange-500 px-4 py-2 rounded-lg shadow hover:bg-orange-600 transition duration-200">
                     Tickets
                 </Link>
             ) : (
                 <>
                     <Link
                         href="/login"
-                        className="text-sm text-gray-700 underline">
+                        className="ml-4 text-sm text-white bg-orange-500 px-4 py-2 rounded-lg shadow hover:bg-orange-600 transition duration-200">
                         Login
                     </Link>
 
                     <Link
                         href="/register"
-                        className="ml-4 text-sm text-gray-700 underline">
+                        className="ml-4 text-sm text-white bg-orange-500 px-4 py-2 rounded-lg shadow hover:bg-orange-600 transition duration-200">
                         Register
                     </Link>
                 </>

@@ -13,9 +13,9 @@ import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
 const Login = () => {
     const router = useRouter()
 
-    const { login } = useAuth({
+    const { user, login } = useAuth({
         middleware: 'guest',
-        redirectIfAuthenticated: '/adminO',
+        redirectIfAuthenticated: '/dashboard',
     })
 
     const [email, setEmail] = useState('')
@@ -25,6 +25,9 @@ const Login = () => {
     const [status, setStatus] = useState(null)
 
     useEffect(() => {
+        if (user && user.is_admin) {
+            router.push('/admin')
+        }
         if (router.reset?.length > 0 && errors.length === 0) {
             setStatus(atob(router.reset))
         } else {
@@ -42,7 +45,6 @@ const Login = () => {
             setErrors,
             setStatus,
         })
-
     }
 
     return (

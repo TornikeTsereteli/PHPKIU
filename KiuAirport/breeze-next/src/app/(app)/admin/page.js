@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import Trip from '../dashboard/trip'
 import { Island_Moments } from 'next/font/google'
+import { useRouter } from 'next/navigation'
 
 const cities = [
     'Kutaisi',
@@ -20,22 +21,27 @@ const cities = [
 ]
 
 const Admin = () => {
-    const { adminAddRoute, adminDeleteRoute } = useAuth({ middleware: 'auth' })
+    const { user, userGetAllRoutes, adminAddRoute, adminDeleteRoute } = useAuth(
+        { middleware: 'auth' },
+    )
     const [departureCity, setDepartureCity] = useState('')
     const [arrivalCity, setArrivalCity] = useState('')
     const [price, setPrice] = useState(0)
     const [departureDate, setDepartureDate] = useState('')
     const [departureHour, setDepartureHour] = useState('')
+    const [addError, setAddError] = useState('')
 
     const [errors, setErrors] = useState({})
 
     const [routes, setRoutes] = useState([])
+    const router = useRouter()
 
-    const { userGetAllRoutes } = useAuth({ middleware: 'auth' })
+    // const { userGetAllRoutes } = useAuth({ middleware: 'auth' })
 
     const deleteRoute = async id => {
         try {
             await adminDeleteRoute(id)
+            console.log('deleted')
             const newRoutes = routes.filter(route => route.id !== id)
             setRoutes(newRoutes)
         } catch (error) {
@@ -53,6 +59,10 @@ const Admin = () => {
         }
     }
     useEffect(() => {
+        if (!user.is_admin) {
+            console.log('USER IS ADMIN')
+            router.push('/dashboard')
+        }
         getRoutes()
     }, [])
 
@@ -116,41 +126,34 @@ const Admin = () => {
         return dbDateString
     }
 
-    function areObjectsEqual(obj1, obj2) {
-        return (
-            Object.keys(obj1).length === Object.keys(obj2).length &&
-            Object.keys(obj1).every(key => obj1[key] === obj2[key])
-        )
-    }
     const addToDB = async e => {
         e.preventDefault()
         const errorsExist = errorSetter()
 
         if (errorsExist) {
-            console.log('swui')
+            // console.log('swui')
         } else {
             try {
-                await adminAddRoute(
+                const isAdded = await adminAddRoute(
                     departureCity,
                     arrivalCity,
                     price,
                     getDate(),
                 )
+                console.log(isAdded)
                 const newObj = {
-                    id: routes.length,
                     start_location: departureCity,
                     end_location: arrivalCity,
                     price_per_ticket: price,
                 }
-                const isAlreadyAdded = routes.find(obj =>
-                    areObjectsEqual(obj, newObj),
-                )
-                if (isAlreadyAdded == undefined) {
-                    console.log(isAlreadyAdded)
-                    setRoutes([...routes, newObj])
-                }
 
-                console.log('sucessfully added to db')
+                console.log(isAdded.data)
+                if (isAdded.data != -1) {
+                    newObj.id = isAdded.data
+                    setRoutes([...routes, newObj])
+                } else {
+                    setAddError('This route already exists')
+                }
             } catch (error) {
                 console.error(error)
             }
@@ -158,7 +161,7 @@ const Admin = () => {
     }
 
     return (
-        <div className="flex flex-row justify-around w-screen">
+        <div className="flex flex-row justify-around w-screen mt-8">
             <form
                 onSubmit={addToDB}
                 className="bg-white p-6 rounded-lg shadow-lg min-w-96 space-y-4 self-start">
@@ -267,17 +270,24 @@ const Admin = () => {
                         {errors.departureHour}
                     </span>
                 </div>
-                <button className="bg-orange-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-orange-500 hover:text-white transition duration-300">
-                    Click Me
-                </button>
+                <div className="flex flex-col justify-center h-30">
+                    <span className="text-xs text-red-500 max-h-5">
+                        {addError}
+                    </span>
+                    <button className="bg-orange-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-orange-500 hover:text-white transition duration-300">
+                        Add Route
+                    </button>
+                </div>
             </form>
             <div className="max-h-96 w-1/2 min-w-96 flex flex-wrap justify-between">
                 {routes.map(route => (
                     <Trip
+                        key={route.id}
                         route_id={route.id}
                         start_location={route.start_location}
                         end_location={route.end_location}
                         price={route.price_per_ticket}
+                        time={route.departure_time}
                         active={false}
                         deleteRoute={deleteRoute}
                     />
